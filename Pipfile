@@ -8,10 +8,13 @@ verify_ssl = true
 [packages]
 fastapi = "*"
 pytest = "*"
-api = {editable = true,version = "*"}
 loguru = "*"
 uvicorn = "*"
 ujson = "*"
+mysql-connector = "*"
+api = {editable = true,path = "."}
+pandas = "*"
+pymysql = "*"
 
 [requires]
 python_version = "3.6"

@@ -17,7 +17,7 @@ class Application:
             這些訊息來自多元管道，並可以依照訊息特徵（聲量、情緒、來源），做出篩選 \
             </h2>'
         self.api = FastAPI(
-            title="neutral-info api", version="1.1.1", description=descritption
+            title="neutral-info api", version="1.0.0", description=descritption
         )
         origins = [
             "http://localhost",
