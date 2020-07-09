@@ -40,8 +40,19 @@ def get_start_end_date_sql(
         sql = f" {sql} AND `news_pubdate` < '{end_date}' "
 
     if keywords:
-        sql = f" {sql} AND `keywords` like '%{keywords}%' "
+        keywords_statement = []
+        for k in keywords.split(","):#TODO: need to check format
+            keywords_statement.append(f" `keywords` like '%{k}%' ")
+        keywords_statement =  "( " + "OR".join(keywords_statement) + " )"
+        sql = f" {sql} AND {keywords_statement} "
     return sql
+
+
+def get_fetch_alllist(cursor) -> list:
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row)) for row in cursor.fetchall()
+    ]
 
 
 def create_load_sql(
@@ -56,24 +67,6 @@ def create_load_sql(
     colname = "*"
     sql = get_start_end_date_sql(colname, table, date, end_date, keywords)
     return sql
-
-
-def get_fetch_alllist(cursor) -> list:
-    desc = cursor.description
-    # TODO: use loop in row to decode not efficient
-    return [
-        dict(
-            zip(
-                [col[0] for col in desc],
-                (i.decode() if isinstance(i, bytes) else i for i in row),
-            )
-        )
-        for row in cursor.fetchall()
-    ]
-
-    # return [
-    #     dict(zip([col[0] for col in desc], row)) for row in cursor.fetchall()
-    # ]
 
 
 def load(

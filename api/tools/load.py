@@ -20,6 +20,7 @@ def NeutralInfoData(
         database=DATABASE_DICT.get(dataset),
         date=f"{date} 00:00:00",
         end_date=f"{end_date} 00:00:00",
+        keywords=keywords,
         version=version,
     )
     logger.info(f"parameter: {parameter}")
