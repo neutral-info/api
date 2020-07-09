@@ -16,5 +16,29 @@
 ## future work
 
 - todo list
-- test case
+    - keywords, producer_position:修改成 dict
+    ''' exapmle
+        {
+            partyName: '民進黨‘,
+            value: 0.65
+        },
+
+        {
+            id: 'test',
+            publicData: '2020-09-11',
+            title: 'test',
+            content: 'test',
+            keywords: ['test', ' test', 'test',']
+            producer: {
+                id: 'tes',
+                description: 'test',
+                postions: [
+                    {
+                    party: 'test',
+                    value: 'test
+                    },
+                ]
+            }
+        }
+    '''
 - dockerize
