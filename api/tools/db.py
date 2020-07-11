@@ -31,13 +31,13 @@ def get_start_end_date_sql(
     sql = """
         SELECT `{}`
         FROM `{}`
-        WHERE `news_pubdate` >= '{}'
+        WHERE `pubdate` >= '{}'
         """.format(
         "`,`".join(colname), table, date
     )
 
     if end_date:
-        sql = f" {sql} AND `news_pubdate` < '{end_date}' "
+        sql = f" {sql} AND `pubdate` < '{end_date}' "
 
     if keywords:
         keywords_statement = []
@@ -94,7 +94,7 @@ def load(
 
 """
 'news_id', b'longtext', 'YES', bytearray(b''), None, '')
-01:('news_pubdate', b'longtext', 'YES', bytearray(b''), None, '')
+01:('pubdate', b'longtext', 'YES', bytearray(b''), None, '')
 02:('news_title', b'longtext', 'YES', bytearray(b''), None, '')
 03:('news_text', b'longtext', 'YES', bytearray(b''), None, '')
 04:('keywords', b'longtext', 'YES', bytearray(b''), None, '')

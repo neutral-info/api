@@ -3,10 +3,10 @@ from pydantic import BaseModel
 
 
 class News(BaseModel):
-    news_id: str
-    news_pubdate: str
-    news_title: str
-    news_text: str
+    id: str
+    pubdate: str
+    title: str
+    text: str
     keywords: str
     producer_id: str
     producer_desc: str
