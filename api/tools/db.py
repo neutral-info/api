@@ -41,18 +41,23 @@ def get_start_end_date_sql(
 
     if keywords:
         keywords_statement = []
-        for k in keywords.split(","):#TODO: need to check format
+        for k in keywords.split(","):  # TODO: need to check format
             keywords_statement.append(f" `keywords` like '%{k}%' ")
-        keywords_statement =  "( " + "OR".join(keywords_statement) + " )"
+        keywords_statement = "( " + "OR".join(keywords_statement) + " )"
         sql = f" {sql} AND {keywords_statement} "
     return sql
 
 
 def get_fetch_alllist(cursor) -> list:
     desc = cursor.description
-    q =  [
-        dict(zip([col[0] for col in desc], (r.decode() if type(r)==bytes else r for r in row)))
-            for row in cursor.fetchall()
+    q = [
+        dict(
+            zip(
+                [col[0] for col in desc],
+                (r.decode() if type(r) == bytes else r for r in row),
+            )
+        )
+        for row in cursor.fetchall()
     ]
     return q
     # return [
@@ -95,18 +100,3 @@ def load(
     connect.close()
 
     return data
-
-
-"""
-'news_id', b'longtext', 'YES', bytearray(b''), None, '')
-01:('pubdate', b'longtext', 'YES', bytearray(b''), None, '')
-02:('news_title', b'longtext', 'YES', bytearray(b''), None, '')
-03:('news_text', b'longtext', 'YES', bytearray(b''), None, '')
-04:('keywords', b'longtext', 'YES', bytearray(b''), None, '')
-05:('news_keywords', b'longtext', 'YES', bytearray(b''), None, '')
-06:('producer_id', b'longtext', 'YES', bytearray(b''), None, '')
-07:('producer_desc', b'varchar(100)', 'YES', bytearray(b''), None, '')
-08:('producer_position', b'varchar(31)', 'NO', bytearray(b''), b'', '')
-09:('volume_now', b'int', 'NO', bytearray(b''), b'0', '')
-10:('volume_yesterday', b'int', 'NO', bytearray(b''), b'0', '')
-"""

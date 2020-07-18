@@ -1,7 +1,5 @@
 from api.v1 import search
-from api.v1.schema.keywords import (
-    NewsList,
-)
+from api.v1.schema.keywords import NewsList
 
 
 class App(search.Application):
@@ -10,5 +8,6 @@ class App(search.Application):
         super(App, self).__init__()
         # register endpoints
         self.api.get("/api/v1/search", response_model=NewsList)(self.keyword)
+
 
 app = App().api
