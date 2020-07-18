@@ -50,9 +50,14 @@ def get_start_end_date_sql(
 
 def get_fetch_alllist(cursor) -> list:
     desc = cursor.description
-    return [
-        dict(zip([col[0] for col in desc], row)) for row in cursor.fetchall()
+    q =  [
+        dict(zip([col[0] for col in desc], (r.decode() if type(r)==bytes else r for r in row)))
+            for row in cursor.fetchall()
     ]
+    return q
+    # return [
+    #     dict(zip([col[0] for col in desc], row)) for row in cursor.fetchall()
+    # ]
 
 
 def create_load_sql(

@@ -7,9 +7,11 @@ class News(BaseModel):
     pubdate: str
     title: str
     text: str
-    keywords: str
-    producer_id: str
-    producer_desc: str
-    producer_position: str
+    keywords: typing.List[str]
+    producer: typing.Dict[str, typing.Union[str, typing.Dict[str, float]]]
     volume_now: float
     volume_yesterday: float
+
+
+class NewsList(BaseModel):
+    News: typing.List[News]
