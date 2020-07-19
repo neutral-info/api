@@ -7,6 +7,6 @@ before_install:
   - pipenv sync
   - pipenv install codecov
   - cp local_sample.ini local.ini
-  - VERSION=DEPLOY python3 genenv.py
+  - VERSION=CI python3 genenv.py
 script:
   - pipenv run pytest
