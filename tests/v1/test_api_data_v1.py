@@ -46,6 +46,7 @@ def test_News(setUp, data_url):
         "end_date": "2020-06-02",
     }
     res = requests.get(data_url, params=payload)
+    print(res.json())
     resp = res.json()["data"][:1]
     assert resp == [
         {

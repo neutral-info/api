@@ -1,6 +1,9 @@
 language: python
 python:
   - 3.6
+env:
+  - MYSQL_DATA_USER=$MYSQL_DATA_USER
+  - MYSQL_DATA_PASSWORD=$MYSQL_DATA_PASSWORD
 before_install:
   - pip3 install pipenv
   - pipenv --python /usr/bin/python3
@@ -8,5 +11,6 @@ before_install:
   - pipenv install codecov
   - cp local_sample.ini local.ini
   - VERSION=CI python3 genenv.py
+
 script:
   - pipenv run pytest
