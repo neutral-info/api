@@ -4,6 +4,7 @@ python:
 env:
   - MYSQL_DATA_USER=$MYSQL_DATA_USER
   - MYSQL_DATA_PASSWORD=$MYSQL_DATA_PASSWORD
+  - var_test=$var_test
 before_install:
   - pip3 install pipenv
   - pipenv --python /usr/bin/python3
