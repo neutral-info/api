@@ -3,9 +3,6 @@ import socket
 import subprocess
 from configparser import ConfigParser
 
-label = str(subprocess.check_output(["git", "tag", "-l"]).strip())
-label = label.split("\\n")[-1].replace("'", "")
-
 HOST_NAME = socket.gethostname()
 
 local_config = ConfigParser()
@@ -17,9 +14,7 @@ elif HOST_NAME in local_config:
 else:
     section = local_config["DEFAULT"]
 
-env_content = "HOSTNAME={}\nVERSION={}\n".format(
-    HOST_NAME, label
-    )
+env_content = f"HOSTNAME={HOST_NAME}\n"
 for sec in section:
     env_content += "{}={}\n".format(sec.upper(), section[sec])
 

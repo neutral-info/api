@@ -27,28 +27,31 @@
 ## future work
 
 - todo list
-    - keywords, producer_position:修改成 dict
-    ''' exapmle
-        {
-            partyName: '民進黨‘,
-            value: 0.65
-        },
+FIXME:
+- db 資料型態問題
+- docker
+- ci 目前還無法正常執行
+    - 不確定是不是因為 DB 防火牆
+- 資料格式:
+    https://jsoneditoronline.org/#left=local.zenibe&right=local.zadopu
+- keyword api 還有需要有
+    - filter 聲量, 爆發力, 立場, 管道
+    - 立場 api
+    - 管道 api
+- api 分頁 跟 kiko 討論
+- api group id, for 分享使用 跟kiko討論
+- hotinfo api
 
-        {
-            id: 'test',
-            publicData: '2020-09-11',
-            title: 'test',
-            content: 'test',
-            keywords: ['test', ' test', 'test',']
-            producer: {
-                id: 'tes',
-                description: 'test',
-                postions: [
-                    {
-                    party: 'test',
-                    value: 'test
-                    },
-                ]
-            }
-        }
-    '''
+
+import requests
+url = "http://127.0.0.1:8000/api/v1/search"
+parameter = {
+    "dataset": "News",
+    "keywords": "蔡英文",
+    "start_date": "2020-06-01",
+    "end_date": "2020-06-02",
+}
+resp = requests.get(url, params=parameter)
+print(resp)
+data = resp.json()
+print(data)
