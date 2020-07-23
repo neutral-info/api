@@ -31,19 +31,20 @@ def convert_vwNews2News(
         d.pop("producer_position", None)
 
         group_data["News"].append(News(**d).dict())
-        group_data["News"].append(d)
 
     convert_data = [group_data]
     return convert_data
 
 
 def get_data(
-    dataset: str, start_date: str, end_date: str, keywords: str
+    dataset: str, pageNo: int, pageSize: int, keywords: str,
+    volume: int, power: int, position: str, channel: str
 ) -> NewsList:
+    #FIXME: need to add volume, power, position, channel filter
     ret = load.NeutralInfoData(
         dataset=dataset,
-        date=start_date,
-        end_date=end_date,
+        pageNo=pageNo,
+        pageSize=pageSize,
         keywords=keywords,
         version="v1",
     )
@@ -51,6 +52,6 @@ def get_data(
     convert_data = convert_vwNews2News(ret, keywords)
 
     logger.info(
-        f"get keyword:{keywords} data from {dataset} between {start_date} and {end_date} result"
+        f"get keyword:{keywords} data from {dataset} page {pageNo}"
     )
     return convert_data

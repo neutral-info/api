@@ -16,15 +16,23 @@ class Application(application.Application):
         request: Request,
         dataset: schema.input.DataSetInput,
         keywords: str = "",
-        start_date: str = "",
-        end_date: str = "",
+        pageNo: int = 1,
+        pageSize: int = 10,
+        volume: int = None,
+        power: int = None,
+        position: str = None,
+        channel: str = None
     ):
         list_dic_data = []
         data = get_data(
             dataset=dataset,
-            start_date=start_date,
-            end_date=end_date,
+            pageNo=pageNo,
+            pageSize=pageSize,
             keywords=keywords,
+            volume=volume,
+            power=power,
+            position=position,
+            channel=channel,
         )
 
         if data:
