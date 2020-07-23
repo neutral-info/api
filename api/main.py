@@ -8,6 +8,6 @@ class App(search.Application):
         super(App, self).__init__()
         # register endpoints
         self.api.get("/api/v1/keyword", response_model=NewsList)(self.keyword)
-
+        self.api.get("/api/v1/item")(self.item)
 
 app = App().api
