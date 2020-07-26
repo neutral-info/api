@@ -1,3 +1,4 @@
+import typing
 from starlette.requests import Request
 from starlette.responses import UJSONResponse
 
@@ -18,9 +19,10 @@ class Application(application.Application):
         keywords: str = "",
         pageNo: int = 1,
         pageSize: int = 10,
-        volume: int = None,
+        volumeMin: int = None,
+        volumeMax: int = None,
         power: int = None,
-        position: str = None,
+        positions: str = None,
         channel: str = None
     ):
         list_dic_data = []
@@ -29,9 +31,10 @@ class Application(application.Application):
             pageNo=pageNo,
             pageSize=pageSize,
             keywords=keywords,
-            volume=volume,
+            volumeMin=volumeMin,
+            volumeMax=volumeMax,
             power=power,
-            position=position,
+            positions=positions,
             channel=channel,
         )
 

@@ -38,14 +38,17 @@ def convert_vwNews2News(
 
 def get_data(
     dataset: str, pageNo: int, pageSize: int, keywords: str,
-    volume: int, power: int, position: str, channel: str
+    volumeMin: int, volumeMax: int, power: int, positions: str, channel: str
 ) -> NewsList:
-    #FIXME: need to add volume, power, position, channel filter
+    #FIXME: need to add power, channel filter
     ret = load.NeutralInfoData(
         dataset=dataset,
         pageNo=pageNo,
         pageSize=pageSize,
         keywords=keywords,
+        positions=positions,
+        volumeMin=volumeMin,
+        volumeMax=volumeMax,
         version="v1",
     )
 

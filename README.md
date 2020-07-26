@@ -32,7 +32,12 @@ FIXME:
 - 資料格式:
     https://jsoneditoronline.org/#left=local.zenibe&right=local.zadopu
 - keyword api 還有需要有
-    - filter 聲量, 爆發力, 立場, 管道,  跟 kiko 討論
+    - filter (每次調整filter 參數就會重新request)
+        keyword (完成, 必須給的參數)
+        聲量,  (完成, 最大值跟最小值同時都要有?!)
+        爆發力(kiko晚點弄),
+        立場(producer, position),  (完成)
+        管道(目前只有新聞)
     - 立場 api 跟 kiko 討論 (完成hard code)
     - 管道 api 跟 kiko 討論 (完成hard code)
 - api group id, for 分享使用 跟kiko討論
