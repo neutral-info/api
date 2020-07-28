@@ -12,14 +12,10 @@ class Application(application.Application):
         super(Application, self).__init__()
 
     def item(
-        self,
-        request: Request,
-        itemtype: schema.input.ItemTypeInput,
+        self, request: Request, itemtype: schema.input.ItemTypeInput,
     ):
         list_dic_data = []
-        data = get_data(
-            itemtype=itemtype,
-        )
+        data = get_data(itemtype=itemtype,)
 
         if data:
             list_dic_data = data

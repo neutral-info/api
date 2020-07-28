@@ -23,7 +23,7 @@ class Application(application.Application):
         volumeMax: int = None,
         power: int = None,
         positions: str = None,
-        channel: str = None
+        channel: str = None,
     ):
         list_dic_data = []
         data = get_data(

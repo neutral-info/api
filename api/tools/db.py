@@ -49,20 +49,28 @@ def get_colname(table: str, database: str):
 
 
 def get_page_sql(
-    colname: str, table: str, pageNo: str, pageSize: str,
-    keywords: str, positions: str, volumeMin: int, volumeMax: int,
+    colname: str,
+    table: str,
+    pageNo: str,
+    pageSize: str,
+    keywords: str,
+    positions: str,
+    volumeMin: int,
+    volumeMax: int,
 ) -> str:
 
-    statrIndex = (pageNo-1) * pageSize
+    statrIndex = (pageNo - 1) * pageSize
     sql = """
         SELECT `{0}`
         FROM `{1}`
-        """.format("`,`".join(colname), table)
+        """.format(
+        "`,`".join(colname), table
+    )
 
-    if keywords:# Must be
+    if keywords:  # Must be
         keywords_statement = []
         for k in keywords.split(","):
-            k  = k.strip()
+            k = k.strip()
             keywords_statement.append(f" `keywords` like '%{k}%' ")
         keywords_statement = "WHERE ( " + "OR".join(keywords_statement) + " )"
         sql = f" {sql} {keywords_statement} "
@@ -70,13 +78,15 @@ def get_page_sql(
     if positions:
         position_statement = []
         for p in positions.split(","):
-            p  = p.strip()
+            p = p.strip()
             position_statement.append(f" `producer_position` like '%{p}%'")
         position_statement = "AND ( " + " AND ".join(position_statement) + " )"
         sql = f" {sql} {position_statement} "
 
     if volumeMin or volumeMax:
-        volumeRange_statement = f"AND `volume_now` BETWEEN {volumeMin} AND {volumeMax} "
+        volumeRange_statement = (
+            f"AND `volume_now` BETWEEN {volumeMin} AND {volumeMax} "
+        )
         sql = f" {sql} {volumeRange_statement} "
 
     order_limit_statement = f"""
@@ -85,6 +95,7 @@ def get_page_sql(
                             """
     sql = f" {sql} {order_limit_statement} "
     return sql
+
 
 def get_fetch_alllist(cursor) -> list:
     desc = cursor.description
@@ -116,8 +127,16 @@ def create_load_sql(
     # TODO: maybe news_id not show
     # colname = get_colname(table, database)
     colname = "*"
-    sql = get_page_sql(colname, table, pageNo, pageSize, keywords, positions,
-        volumeMin, volumeMax)
+    sql = get_page_sql(
+        colname,
+        table,
+        pageNo,
+        pageSize,
+        keywords,
+        positions,
+        volumeMin,
+        volumeMax,
+    )
     return sql
 
 
@@ -135,8 +154,14 @@ def load(
 ) -> typing.List[typing.Dict[str, typing.Union[str, int, float]]]:
 
     sql = create_load_sql(
-        database, table, pageNo, pageSize, keywords, positions,
-        volumeMin, volumeMax
+        database,
+        table,
+        pageNo,
+        pageSize,
+        keywords,
+        positions,
+        volumeMin,
+        volumeMax,
     )
     logger.info(f"sql cmd:{sql}")
 
