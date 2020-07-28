@@ -62,6 +62,7 @@ def get_page_sql(
     if keywords:# Must be
         keywords_statement = []
         for k in keywords.split(","):
+            k  = k.strip()
             keywords_statement.append(f" `keywords` like '%{k}%' ")
         keywords_statement = "WHERE ( " + "OR".join(keywords_statement) + " )"
         sql = f" {sql} {keywords_statement} "
@@ -69,8 +70,9 @@ def get_page_sql(
     if positions:
         position_statement = []
         for p in positions.split(","):
+            p  = p.strip()
             position_statement.append(f" `producer_position` like '%{p}%'")
-        position_statement = "AND ( " + "AND".join(position_statement) + " )"
+        position_statement = "AND ( " + " AND ".join(position_statement) + " )"
         sql = f" {sql} {position_statement} "
 
     if volumeMin or volumeMax:
