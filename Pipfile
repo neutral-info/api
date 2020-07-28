@@ -11,11 +11,11 @@ pytest = "*"
 loguru = "*"
 uvicorn = "*"
 ujson = "*"
-mysql-connector = "*"
 api = {editable = true,path = "."}
 pandas = "*"
 pymysql = "*"
 requests = "*"
+mysql-connector-python = "*"
 
 [requires]
 python_version = "3.6"
