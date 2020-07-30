@@ -16,6 +16,7 @@ def NeutralInfoData(
     positions: str,
     volumeMin: int,
     volumeMax: int,
+    datatype: str = "page",
     version: str = "",
 ):
     parameter = dict(
@@ -27,6 +28,7 @@ def NeutralInfoData(
         positions=positions,
         volumeMin=volumeMin,
         volumeMax=volumeMax,
+        datatype=datatype,
         version=version,
     )
     logger.info(f"parameter: {parameter}")

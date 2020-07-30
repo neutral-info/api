@@ -48,7 +48,7 @@ def get_colname(table: str, database: str):
 #     return sql
 
 
-def get_page_sql(
+def get_keywords_page_sql(
     colname: str,
     table: str,
     pageNo: str,
@@ -61,13 +61,12 @@ def get_page_sql(
 
     statrIndex = (pageNo - 1) * pageSize
     sql = """
-        SELECT `{0}`
+        SELECT {0}
         FROM `{1}`
-        """.format(
-        "`,`".join(colname), table
+        """.format(colname, table
     )
 
-    if keywords:  # Must be
+    if keywords:  # Must be FIXME:
         keywords_statement = []
         for k in keywords.split(","):
             k = k.strip()
@@ -123,20 +122,34 @@ def create_load_sql(
     positions: str,
     volumeMin: int,
     volumeMax: int,
+    datatype: str,
 ) -> str:
     # TODO: maybe news_id not show
     # colname = get_colname(table, database)
-    colname = "*"
-    sql = get_page_sql(
-        colname,
-        table,
-        pageNo,
-        pageSize,
-        keywords,
-        positions,
-        volumeMin,
-        volumeMax,
-    )
+    if datatype == "page":
+        colname = "*"
+        sql = get_keywords_page_sql(
+            colname,
+            table,
+            pageNo,
+            pageSize,
+            keywords,
+            positions,
+            volumeMin,
+            volumeMax,
+        )
+    elif datatype == "count":
+        colname = "COUNT(*)"
+        sql = get_keywords_page_sql(
+            colname,
+            table,
+            pageNo,
+            pageSize,
+            keywords,
+            positions,
+            volumeMin,
+            volumeMax,
+        )
     return sql
 
 
@@ -149,6 +162,7 @@ def load(
     positions: str = "",
     volumeMin: int = None,
     volumeMax: int = None,
+    datatype: str = None,
     version: str = "",
     **kwargs,
 ) -> typing.List[typing.Dict[str, typing.Union[str, int, float]]]:
@@ -162,7 +176,9 @@ def load(
         positions,
         volumeMin,
         volumeMax,
+        datatype,
     )
+
     logger.info(f"sql cmd:{sql}")
 
     connect = clients.get_db_client(database)

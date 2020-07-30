@@ -8,6 +8,7 @@ from loguru import logger
 def convert_vwNews2News(
     listdictdata: typing.List[typing.Dict[str, typing.Union[str, list, float]]],
     keywords: str,
+    countsinfo: int,
 ) -> KeywordList:
 
     group_data_News = []
@@ -28,10 +29,10 @@ def convert_vwNews2News(
 
         group_data_News.append(News(**d).dict())
 
-    group_data = {}
-    group_data["keyword"] = [keywords]
-    group_data["News"] = group_data_News
-    convert_data = [group_data]
+    convert_data = {}
+    convert_data["totalNews"] = countsinfo["totalNews"]
+    convert_data["totalPageNo"] = countsinfo["totalPageNo"]
+    convert_data["News"] = group_data_News
     return convert_data
 
 
@@ -55,10 +56,26 @@ def get_data(
         positions=positions,
         volumeMin=volumeMin,
         volumeMax=volumeMax,
+        datatype="page",
         version="v1",
     )
 
-    convert_data = convert_vwNews2News(ret, keywords)
+    ret_count = load.NeutralInfoData(
+        dataset=dataset,
+        pageNo=pageNo,
+        pageSize=pageSize,
+        keywords=keywords,
+        positions=positions,
+        volumeMin=volumeMin,
+        volumeMax=volumeMax,
+        datatype="count",
+        version="v1",
+    )
+    countsinfo = {}
+    countsinfo["totalNews"] = ret_count[0]["COUNT(*)"]
+    countsinfo["totalPageNo"] = int(countsinfo["totalNews"] / pageSize) + 1 if (countsinfo["totalNews"] % pageSize) else int(countsinfo["totalNews"] / pageSize)
+
+    convert_data = convert_vwNews2News(ret, keywords, countsinfo)
 
     logger.info(f"get keyword:{keywords} data from {dataset} page {pageNo}")
     return convert_data

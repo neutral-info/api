@@ -29,6 +29,11 @@
 - todo list
 FIXME:
 - db 資料型態問題
+
+- 排序 base on 爆發力, 聲量, 新聞建立時間, base on news
+- keywoords 不一定是必填
+- 參數加 news 區隔開來, 避免 跟group id重複
+
 - 資料格式:
     https://jsoneditoronline.org/#left=local.zenibe&right=local.zadopu
 - keyword api 還有需要有
@@ -46,4 +51,3 @@ FIXME:
     - 不確定是不是因為 DB 防火牆
 - add test
 - hotinfo api
-- api 分頁 跟 kiko 討論 (完成)

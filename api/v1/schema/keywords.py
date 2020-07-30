@@ -19,5 +19,6 @@ class News(BaseModel):
 
 
 class KeywordList(BaseModel):
-    keyword: typing.List[str]
+    totalNews: int
+    totalPageNo: int
     News: typing.List[News]
