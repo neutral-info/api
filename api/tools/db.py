@@ -66,33 +66,53 @@ def get_keywords_page_sql(
         """.format(colname, table
     )
 
-    if keywords:  # Must be FIXME:
+    first_condiction_flag = True
+    if keywords:
+        if first_condiction_flag:
+            where_or_and = "WHERE"
+            first_condiction_flag = False
+        else:
+            where_or_and = "AND"
+
         keywords_statement = []
         for k in keywords.split(","):
             k = k.strip()
             keywords_statement.append(f" `keywords` like '%{k}%' ")
-        keywords_statement = "WHERE ( " + "OR".join(keywords_statement) + " )"
+        keywords_statement = f"{where_or_and} ( " + "OR".join(keywords_statement) + " )"
         sql = f" {sql} {keywords_statement} "
 
     if positions:
+        if first_condiction_flag:
+            where_or_and = "WHERE"
+            first_condiction_flag = False
+        else:
+            where_or_and = "AND"
+
         position_statement = []
         for p in positions.split(","):
             p = p.strip()
             position_statement.append(f" `producer_position` like '%{p}%'")
-        position_statement = "AND ( " + " AND ".join(position_statement) + " )"
+        position_statement = f"{where_or_and} ( " + " AND ".join(position_statement) + " )"
         sql = f" {sql} {position_statement} "
 
     if volumeMin or volumeMax:
+        if first_condiction_flag:
+            where_or_and = "WHERE"
+            first_condiction_flag = False
+        else:
+            where_or_and = "AND"
+
         volumeRange_statement = (
-            f"AND `volume_now` BETWEEN {volumeMin} AND {volumeMax} "
+            f"{where_or_and} `volume_now` BETWEEN {volumeMin} AND {volumeMax} "
         )
         sql = f" {sql} {volumeRange_statement} "
 
-    order_limit_statement = f"""
-                            ORDER BY `pubdate` DESC
-                            LIMIT {statrIndex}, {pageSize}
-                            """
-    sql = f" {sql} {order_limit_statement} "
+    if colname != "COUNT(*)":
+        order_limit_statement = f"""
+                                ORDER BY `pubdate` DESC
+                                LIMIT {statrIndex}, {pageSize}
+                                """
+        sql = f" {sql} {order_limit_statement} "
     return sql
 
 
