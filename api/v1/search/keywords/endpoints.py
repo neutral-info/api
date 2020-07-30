@@ -16,9 +16,11 @@ class Application(application.Application):
         self,
         request: Request,
         dataset: schema.input.DataSetInput,
-        keywords: str = "",
+        orderby: schema.input.OrderByInput,
+        ordertype: schema.input.OrderTypeInput,
         pageNo: int = 1,
-        pageSize: int = 10,
+        pageSize: int = 5,
+        keywords: str = None,
         volumeMin: int = None,
         volumeMax: int = None,
         power: int = None,
@@ -36,6 +38,8 @@ class Application(application.Application):
             power=power,
             positions=positions,
             channel=channel,
+            orderby=orderby,
+            ordertype=ordertype,
         )
 
         if data:

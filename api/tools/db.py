@@ -25,29 +25,6 @@ def get_colname(table: str, database: str):
     return query(f"SHOW COLUMNS FROM {table}", database)
 
 
-# def get_start_end_date_sql(
-#     colname: str, table: str, date: str, end_date: str, keywords: str,
-# ) -> str:
-#     sql = """
-#         SELECT `{}`
-#         FROM `{}`
-#         WHERE `pubdate` >= '{}'
-#         """.format(
-#         "`,`".join(colname), table, date
-#     )
-
-#     if end_date:
-#         sql = f" {sql} AND `pubdate` < '{end_date}' "
-
-#     if keywords:
-#         keywords_statement = []
-#         for k in keywords.split(","):  # TODO: need to check format
-#             keywords_statement.append(f" `keywords` like '%{k}%' ")
-#         keywords_statement = "( " + "OR".join(keywords_statement) + " )"
-#         sql = f" {sql} AND {keywords_statement} "
-#     return sql
-
-
 def get_keywords_page_sql(
     colname: str,
     table: str,
@@ -57,6 +34,8 @@ def get_keywords_page_sql(
     positions: str,
     volumeMin: int,
     volumeMax: int,
+    orderby: str,
+    ordertype: str,
 ) -> str:
 
     statrIndex = (pageNo - 1) * pageSize
@@ -109,7 +88,7 @@ def get_keywords_page_sql(
 
     if colname != "COUNT(*)":
         order_limit_statement = f"""
-                                ORDER BY `pubdate` DESC
+                                ORDER BY `{orderby}` {ordertype}
                                 LIMIT {statrIndex}, {pageSize}
                                 """
         sql = f" {sql} {order_limit_statement} "
@@ -143,6 +122,8 @@ def create_load_sql(
     volumeMin: int,
     volumeMax: int,
     datatype: str,
+    orderby: str,
+    ordertype: str,
 ) -> str:
     # TODO: maybe news_id not show
     # colname = get_colname(table, database)
@@ -157,6 +138,8 @@ def create_load_sql(
             positions,
             volumeMin,
             volumeMax,
+            orderby,
+            ordertype,
         )
     elif datatype == "count":
         colname = "COUNT(*)"
@@ -169,6 +152,8 @@ def create_load_sql(
             positions,
             volumeMin,
             volumeMax,
+            orderby,
+            ordertype,
         )
     return sql
 
@@ -182,7 +167,9 @@ def load(
     positions: str = "",
     volumeMin: int = None,
     volumeMax: int = None,
-    datatype: str = None,
+    datatype: str = "",
+    orderby: str = "",
+    ordertype: str = "",
     version: str = "",
     **kwargs,
 ) -> typing.List[typing.Dict[str, typing.Union[str, int, float]]]:
@@ -197,6 +184,8 @@ def load(
         volumeMin,
         volumeMax,
         datatype,
+        orderby,
+        ordertype,
     )
 
     logger.info(f"sql cmd:{sql}")

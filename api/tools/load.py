@@ -16,6 +16,8 @@ def NeutralInfoData(
     positions: str,
     volumeMin: int,
     volumeMax: int,
+    ordertype: str,
+    orderby: str,
     datatype: str = "page",
     version: str = "",
 ):
@@ -29,6 +31,8 @@ def NeutralInfoData(
         volumeMin=volumeMin,
         volumeMax=volumeMax,
         datatype=datatype,
+        orderby=orderby,
+        ordertype=ordertype,
         version=version,
     )
     logger.info(f"parameter: {parameter}")

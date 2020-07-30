@@ -46,6 +46,8 @@ def get_data(
     power: int,
     positions: str,
     channel: str,
+    orderby: str,
+    ordertype: str,
 ):
     # FIXME: need to add power, channel filter
     ret = load.NeutralInfoData(
@@ -57,6 +59,8 @@ def get_data(
         volumeMin=volumeMin,
         volumeMax=volumeMax,
         datatype="page",
+        orderby=orderby,
+        ordertype=ordertype,
         version="v1",
     )
 
@@ -69,6 +73,8 @@ def get_data(
         volumeMin=volumeMin,
         volumeMax=volumeMax,
         datatype="count",
+        orderby=orderby,
+        ordertype=ordertype,
         version="v1",
     )
     countsinfo = {}
