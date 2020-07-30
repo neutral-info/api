@@ -8,14 +8,15 @@ import uvicorn
 
 from api.main import App
 
+
 @pytest.fixture(scope="module")
 def index_url():
     return "http://127.0.0.1:5000"
 
 
 @pytest.fixture(scope="module")
-def data_url(index_url):
-    return f"{index_url}/api/v1/search"
+def keyword_url(index_url):
+    return f"{index_url}/api/v1/keyword"
 
 
 @pytest.fixture(scope="module")
@@ -38,38 +39,59 @@ def test_index(setUp, index_url):
     assert res.headers["access-control-allow-origin"] == "*"
 
 
-def test_News(setUp, data_url):
+def test_News(setUp, keyword_url):
     payload = {
         "dataset": "News",
         "keywords": "蔡英文",
-        "start_date": "2020-06-01",
-        "end_date": "2020-06-02",
+        "pageNo": 1,
+        "pageSize": 1,
+        "volumeMin": 0,
+        "volumeMax": 10,
+        "orderby": "pubdate",
+        "ordertype": "DESC",
+        "positions": "國民黨",
     }
-    res = requests.get(data_url, params=payload)
-    print(res.json())
-    resp = res.json()["data"][:1]
-    assert resp == [
-        {
-            "id": "6ad51805-494f-49c3-b55e-0b732c7a76a3",
-            "pubdate": "2020-06-01T11:57:00",
-            "title": "【國艦國造】4000噸級巡防艦內建負壓隔離病房 蔡英文2日主持下水典禮 -- 上報 / 焦點",
-            "text": "海巡署委託台船公司製造的首艘4000噸級巡防艦，配備有鎮海火箭、負壓隔離病房，2日將進行下水典禮，並由蔡英文總統親自擲瓶主持並命名。  4000噸級巡防艦有鎮海火箭彈、20機槍、20砲塔等配備，其中，「鎮海火箭彈」，其系統是由中科院研發，可搭載42枚2.75吋火箭彈，這可取代過去海巡巡防艦主砲40砲。  為因應疫情來勢洶洶，艦隊分署特別規劃升級病房設備，一般病房均增設負壓隔離罩，以降低病患間交叉感染機會，同時減低醫療人員受感染之風險，艦上也建置手術室、溫度室，提供完整醫療設備。  4000噸級巡防艦也建置直升機庫，可供海軍S-70C直昇機臨時駐艦，遇有海",
-            "keywords": [
-                "4000噸級巡防艦",
-                "蔡英文",
-                "鎮海火箭"
-            ],
-            "volume_now": 0,
-            "volume_yesterday": 0,
-            "producer": {
-                "id": "5030b49f-81fe-11ea-8627-f23c92e71bad",
-                "desc": "上報",
-                "position": {
-                    "民進黨": 0.65,
-                    "國民黨": 0.2,
-                    "時力": 0.65,
-                    "親中": 0.2
-                }
+    res = requests.get(keyword_url, params=payload)
+    resp = res.json()["data"]
+    assert resp == {
+        "totalNews": 8,
+        "totalPageNo": 8,
+        "News": [
+            {
+                "id": "55a47e60-f6ef-455c-908c-d0e52ed9fed8",
+                "pubdate": "2020-06-02T15:08:00",
+                "title": "主持4千噸級「嘉義艦」下水典禮 蔡英文：「國艦國造」的雙重里程碑 -- 上報 / 焦點",
+                "text": "2日上午，蔡英文總統與行政院副院長陳其邁、海洋委員會李仲威、海巡署署長陳國恩及台船公司董事長鄭文隆等人共同出席於台船公司高雄廠舉行的「4000噸級巡防艦首艦命名暨下水典禮」。  蔡英文除了為巡防艦命名為「嘉義艦」外，並按照慣例執行「擲瓶下水」儀式。她表示，「嘉義艦」開創了兩個新的里程碑，除了是國艦國造的重大成功外，船上搭載的醫療設備也為台灣海上醫療救護能量寫下嶄新的一頁。  蔡英文2日主持「嘉義艦」的命名暨擲瓶下水典禮，嘉義艦未來將隸屬於中部地區機動海巡隊。  4千噸級的嘉義艦是海巡署歷來噸位最大的海巡艦，能承受10級強風、續航力超過10000浬；嘉義艦",
+                "keywords": [
+                    "嘉義艦",
+                    "巡防艦",
+                    "蔡英文",
+                    "海巡署"
+                    ],
+                "producer": {
+                    "id": "5030b49f-81fe-11ea-8627-f23c92e71bad",
+                    "desc": "上報",
+                    "position": [
+                        {
+                        "party:": "民進黨",
+                        "trend": "0.65"
+                        },
+                        {
+                        "party:": "國民黨",
+                        "trend": "0.2"
+                        },
+                        {
+                        "party:": "時力",
+                        "trend": "0.65"
+                        },
+                        {
+                        "party:": "親中",
+                        "trend": "0.2"
+                        }
+                    ]
+                },
+                "volume_now": 0,
+                "volume_yesterday": 0
             }
-        },
-    ]
+        ]
+    }
