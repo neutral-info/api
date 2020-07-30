@@ -11,6 +11,7 @@
 ## run api server
 
 - docker
+    build : docker-compose -f docker-compose.yml build
 
     up: docker-compose -f docker-compose.yml up -d
 
@@ -27,18 +28,13 @@
 ## future work
 
 - todo list
-FIXME:
-- db 資料型態問題
-
-- 排序 base on 爆發力, 聲量, 新聞建立時間, base on news
-- keywoords 不一定是必填
 - 參數加 news 區隔開來, 避免 跟group id重複
 
-- 資料格式:
-    https://jsoneditoronline.org/#left=local.zenibe&right=local.zadopu
+- 排序 base on 爆發力, 聲量, 新聞建立時間, base on news (完成)
+- keywoords 不一定是必填 (完成)
 - keyword api 還有需要有
     - filter (每次調整filter 參數就會重新request)
-        keyword (完成, 必須給的參數)
+        keyword (完成)
         聲量,  (完成, 最大值跟最小值同時都要有?!)
         爆發力(kiko晚點弄),
         立場(producer, position),  (完成)
