@@ -131,4 +131,4 @@ dmypy.json
 # vscode project settings
 .vscode
 
-config.py
+local.ini

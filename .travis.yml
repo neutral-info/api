@@ -1,11 +1,14 @@
 language: python
-matrix:
-  include:
-  - name: "3.6 Unit Test"
-    python: "3.6"
-    env: TEST_SUITE=suite_3_6_unit
-script:
+python:
+  - 3.6
+env:
+  - MYSQL_DATA_USER=$MYSQL_DATA_USER MYSQL_DATA_PASSWORD=$MYSQL_DATA_PASSWORD var_test=$var_test
+before_install:
   - pip3 install pipenv
   - pipenv --python /usr/bin/python3
   - pipenv sync
+  - cp local_sample.ini local.ini
+  - VERSION=CI python3 genenv.py
+
+script:
   - pipenv run pytest

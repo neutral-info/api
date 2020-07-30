@@ -1,25 +1,16 @@
-from loguru import logger
-from starlette.responses import UJSONResponse
-
-from api import v1
+from api.v1 import search
+from api.v1.schema.keywords import KeywordList
 
 
-class App(v1.Application):
+class App(search.Application):
     # design api interface
     def __init__(self):
         super(App, self).__init__()
         # register endpoints
-        self.api.get("/")(self.main)
-        self.api.on_event("shutdown")(self.close)
-
-    async def main(self):
-        return UJSONResponse(
-            {"status": "ok"}, headers={"Access-Control-Allow-Origin": "*"}
+        self.api.get("/api/v1/keyword", response_model=KeywordList)(
+            self.keyword
         )
-
-    async def close(self):
-        """ Gracefull shutdown. """
-        logger.info("Shutting down the app.")
+        self.api.get("/api/v1/item")(self.item)
 
 
 app = App().api

@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: neutralinfo_api
+    ports:
+      - target: 8000
+        published: 9000
+        mode: host
+    env_file: .env
+    hostname: api
+    command: pipenv run uvicorn api.main:app --reload --host 0.0.0.0
+    restart: always
+    environment:
+      - TZ=Asia/Taipei
+    networks:
+        - neutralinfo_api
+
+networks:
+  neutralinfo_api:

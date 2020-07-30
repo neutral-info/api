@@ -10,17 +10,29 @@ from api.tools.data_dict import (
 
 def NeutralInfoData(
     dataset: str,
-    date: str = "",
-    end_date: str = "",
-    keywords: str = "",
+    pageNo: int,
+    pageSize: int,
+    keywords: str,
+    positions: str,
+    volumeMin: int,
+    volumeMax: int,
+    ordertype: str,
+    orderby: str,
+    datatype: str = "page",
     version: str = "",
 ):
     parameter = dict(
         table=TABLE_DICT.get(dataset),
         database=DATABASE_DICT.get(dataset),
-        date=f"{date} 00:00:00",
-        end_date=f"{end_date} 00:00:00",
+        pageNo=pageNo,
+        pageSize=pageSize,
         keywords=keywords,
+        positions=positions,
+        volumeMin=volumeMin,
+        volumeMax=volumeMax,
+        datatype=datatype,
+        orderby=orderby,
+        ordertype=ordertype,
         version=version,
     )
     logger.info(f"parameter: {parameter}")

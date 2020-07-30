@@ -25,61 +25,169 @@ def get_colname(table: str, database: str):
     return query(f"SHOW COLUMNS FROM {table}", database)
 
 
-def get_start_end_date_sql(
-    colname: str, table: str, date: str, end_date: str, keywords: str,
+def get_keywords_page_sql(
+    colname: str,
+    table: str,
+    pageNo: str,
+    pageSize: str,
+    keywords: str,
+    positions: str,
+    volumeMin: int,
+    volumeMax: int,
+    orderby: str,
+    ordertype: str,
 ) -> str:
+
+    statrIndex = (pageNo - 1) * pageSize
     sql = """
-        SELECT `{}`
-        FROM `{}`
-        WHERE `news_pubdate` >= '{}'
-        """.format(
-        "`,`".join(colname), table, date
+        SELECT {0}
+        FROM `{1}`
+        """.format(colname, table
     )
 
-    if end_date:
-        sql = f" {sql} AND `news_pubdate` < '{end_date}' "
-
+    first_condiction_flag = True
     if keywords:
+        if first_condiction_flag:
+            where_or_and = "WHERE"
+            first_condiction_flag = False
+        else:
+            where_or_and = "AND"
+
         keywords_statement = []
-        for k in keywords.split(","):#TODO: need to check format
+        for k in keywords.split(","):
+            k = k.strip()
             keywords_statement.append(f" `keywords` like '%{k}%' ")
-        keywords_statement =  "( " + "OR".join(keywords_statement) + " )"
-        sql = f" {sql} AND {keywords_statement} "
+        keywords_statement = f"{where_or_and} ( " + "OR".join(keywords_statement) + " )"
+        sql = f" {sql} {keywords_statement} "
+
+    if positions:
+        if first_condiction_flag:
+            where_or_and = "WHERE"
+            first_condiction_flag = False
+        else:
+            where_or_and = "AND"
+
+        position_statement = []
+        for p in positions.split(","):
+            p = p.strip()
+            position_statement.append(f" `producer_position` like '%{p}%'")
+        position_statement = f"{where_or_and} ( " + " AND ".join(position_statement) + " )"
+        sql = f" {sql} {position_statement} "
+
+    if volumeMin or volumeMax:
+        if first_condiction_flag:
+            where_or_and = "WHERE"
+            first_condiction_flag = False
+        else:
+            where_or_and = "AND"
+
+        volumeRange_statement = (
+            f"{where_or_and} `volume_now` BETWEEN {volumeMin} AND {volumeMax} "
+        )
+        sql = f" {sql} {volumeRange_statement} "
+
+    if colname != "COUNT(*)":
+        order_limit_statement = f"""
+                                ORDER BY `{orderby}` {ordertype}
+                                LIMIT {statrIndex}, {pageSize}
+                                """
+        sql = f" {sql} {order_limit_statement} "
     return sql
 
 
 def get_fetch_alllist(cursor) -> list:
     desc = cursor.description
+    # q = [
+    #     dict(
+    #         zip(
+    #             [col[0] for col in desc],
+    #             (r.decode() if type(r) == bytes else r for r in row),
+    #         )
+    #     )
+    #     for row in cursor.fetchall()
+    # ]
+    # return q
     return [
         dict(zip([col[0] for col in desc], row)) for row in cursor.fetchall()
     ]
 
 
 def create_load_sql(
-    database: str = "",
-    table: str = "",
-    date: str = "",
-    end_date: str = "",
-    keywords: str = "",
+    database: str,
+    table: str,
+    pageNo: int,
+    pageSize: int,
+    keywords: str,
+    positions: str,
+    volumeMin: int,
+    volumeMax: int,
+    datatype: str,
+    orderby: str,
+    ordertype: str,
 ) -> str:
     # TODO: maybe news_id not show
     # colname = get_colname(table, database)
-    colname = "*"
-    sql = get_start_end_date_sql(colname, table, date, end_date, keywords)
+    if datatype == "page":
+        colname = "*"
+        sql = get_keywords_page_sql(
+            colname,
+            table,
+            pageNo,
+            pageSize,
+            keywords,
+            positions,
+            volumeMin,
+            volumeMax,
+            orderby,
+            ordertype,
+        )
+    elif datatype == "count":
+        colname = "COUNT(*)"
+        sql = get_keywords_page_sql(
+            colname,
+            table,
+            pageNo,
+            pageSize,
+            keywords,
+            positions,
+            volumeMin,
+            volumeMax,
+            orderby,
+            ordertype,
+        )
     return sql
 
 
 def load(
     database: str = "",
     table: str = "",
-    date: str = "",
-    end_date: str = "",
+    pageNo: int = None,
+    pageSize: int = None,
     keywords: str = "",
+    positions: str = "",
+    volumeMin: int = None,
+    volumeMax: int = None,
+    datatype: str = "",
+    orderby: str = "",
+    ordertype: str = "",
     version: str = "",
     **kwargs,
 ) -> typing.List[typing.Dict[str, typing.Union[str, int, float]]]:
 
-    sql = create_load_sql(database, table, date, end_date, keywords)
+    sql = create_load_sql(
+        database,
+        table,
+        pageNo,
+        pageSize,
+        keywords,
+        positions,
+        volumeMin,
+        volumeMax,
+        datatype,
+        orderby,
+        ordertype,
+    )
+
     logger.info(f"sql cmd:{sql}")
 
     connect = clients.get_db_client(database)
@@ -90,18 +198,3 @@ def load(
     connect.close()
 
     return data
-
-
-"""
-'news_id', b'longtext', 'YES', bytearray(b''), None, '')
-01:('news_pubdate', b'longtext', 'YES', bytearray(b''), None, '')
-02:('news_title', b'longtext', 'YES', bytearray(b''), None, '')
-03:('news_text', b'longtext', 'YES', bytearray(b''), None, '')
-04:('keywords', b'longtext', 'YES', bytearray(b''), None, '')
-05:('news_keywords', b'longtext', 'YES', bytearray(b''), None, '')
-06:('producer_id', b'longtext', 'YES', bytearray(b''), None, '')
-07:('producer_desc', b'varchar(100)', 'YES', bytearray(b''), None, '')
-08:('producer_position', b'varchar(31)', 'NO', bytearray(b''), b'', '')
-09:('volume_now', b'int', 'NO', bytearray(b''), b'0', '')
-10:('volume_yesterday', b'int', 'NO', bytearray(b''), b'0', '')
-"""
