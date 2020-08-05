@@ -43,13 +43,14 @@ def get_data(
     keywords: str,
     volumeMin: int,
     volumeMax: int,
-    power: int,
+    powerMin: int,
+    powerMax: int,
     positions: str,
     channel: str,
     orderby: str,
     ordertype: str,
 ):
-    # FIXME: need to add power, channel filter
+    # FIXME: need to add powerMin, powerMax, channel filter
     ret = load.NeutralInfoData(
         dataset=dataset,
         pageNo=pageNo,
