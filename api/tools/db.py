@@ -51,9 +51,8 @@ def get_keywords_page_sql(
     sql = """
         SELECT {0}
         FROM `{1}`
-        """.format(
-        colname, table
-    )
+        LEFT JOIN `NewsPosition` ON {1}.id=NewsPosition.id
+        """.format(colname, table)
 
     first_condiction_flag = True
     if keywords:
@@ -78,7 +77,7 @@ def get_keywords_page_sql(
         position_statement = []
         for p in positions.split(","):
             p = p.strip()
-            position_statement.append(f" `producer_position` like '%{p}%'")
+            position_statement.append(f" `position` like '%{p}%'")
         position_statement = (
             f"{where_or_and} ( " + " AND ".join(position_statement) + " )"
         )
@@ -126,7 +125,7 @@ def get_fetch_alllist(cursor) -> list:
     ]
 
 
-def create_load_sql(
+def create_pages_sql(
     database: str,
     table: str,
     pageNo: int,
@@ -172,7 +171,7 @@ def create_load_sql(
     return sql
 
 
-def load(
+def load_pages(
     database: str = "",
     table: str = "",
     pageNo: int = None,
@@ -188,7 +187,7 @@ def load(
     **kwargs,
 ) -> typing.List[typing.Dict[str, typing.Union[str, int, float]]]:
 
-    sql = create_load_sql(
+    sql = create_pages_sql(
         database,
         table,
         pageNo,

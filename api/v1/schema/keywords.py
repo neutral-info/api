@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 class News(BaseModel):
     id: str
+    position: typing.List[typing.Dict[str, typing.Union[str, float]]]
     pubdate: str
     title: str
     text: str
