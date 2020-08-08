@@ -6,20 +6,18 @@ from loguru import logger
 
 
 def convert_vwNews2News(
-    listdictdata: typing.List[typing.Dict[str, typing.Union[str, list, float]]],
-    keywords: str,
-    countsinfo: int,
+    listdictdata: typing.List[typing.Dict[str, typing.Union[str, list, float]]], keywords: str, countsinfo: int,
 ) -> KeywordList:
 
     group_data_News = []
     for d in listdictdata:
+        d["position"] = [{"party:": p.split("*")[0], "trend": float(p.split("*")[1])} for p in d["position"].split("|")]
         d["keywords"] = d["keywords"].split(",")
         d["producer"] = {
             "id": d["producer_id"],
             "desc": d["producer_desc"],
             "position": [
-                {"party:": p.split("*")[0], "trend": float(p.split("*")[1])}
-                for p in d["producer_position"].split("|")
+                {"party:": p.split("*")[0], "trend": float(p.split("*")[1])} for p in d["producer_position"].split("|")
             ],
         }
 
@@ -43,14 +41,15 @@ def get_data(
     keywords: str,
     volumeMin: int,
     volumeMax: int,
-    power: int,
+    powerMin: int,
+    powerMax: int,
     positions: str,
     channel: str,
     orderby: str,
     ordertype: str,
 ):
-    # FIXME: need to add power, channel filter
-    ret = load.NeutralInfoData(
+    # FIXME: need to add powerMin, powerMax, channel filter
+    ret = load.NID_pages(
         dataset=dataset,
         pageNo=pageNo,
         pageSize=pageSize,
@@ -64,7 +63,7 @@ def get_data(
         version="v1",
     )
 
-    ret_count = load.NeutralInfoData(
+    ret_count = load.NID_pages(
         dataset=dataset,
         pageNo=pageNo,
         pageSize=pageSize,
@@ -79,7 +78,11 @@ def get_data(
     )
     countsinfo = {}
     countsinfo["totalNews"] = ret_count[0]["COUNT(*)"]
-    countsinfo["totalPageNo"] = int(countsinfo["totalNews"] / pageSize) + 1 if (countsinfo["totalNews"] % pageSize) else int(countsinfo["totalNews"] / pageSize)
+    countsinfo["totalPageNo"] = (
+        int(countsinfo["totalNews"] / pageSize) + 1
+        if (countsinfo["totalNews"] % pageSize)
+        else int(countsinfo["totalNews"] / pageSize)
+    )
 
     convert_data = convert_vwNews2News(ret, keywords, countsinfo)
 

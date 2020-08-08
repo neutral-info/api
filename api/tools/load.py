@@ -1,14 +1,14 @@
 import typing
 
 from loguru import logger
-from api.tools.db import load
+from api.tools.db import load_pages
 from api.tools.data_dict import (
     TABLE_DICT,
     DATABASE_DICT,
 )
 
 
-def NeutralInfoData(
+def NID_pages(
     dataset: str,
     pageNo: int,
     pageSize: int,
@@ -35,6 +35,6 @@ def NeutralInfoData(
         ordertype=ordertype,
         version=version,
     )
-    logger.info(f"parameter: {parameter}")
-    data = load(**parameter)
+    logger.info(f"NID_pages parameter: {parameter}")
+    data = load_pages(**parameter)
     return data
