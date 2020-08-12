@@ -51,7 +51,6 @@ def get_keywords_page_sql(
     sql = """
         SELECT {0}
         FROM `{1}`
-        LEFT JOIN `NewsPosition` ON {1}.id=NewsPosition.id
         """.format(colname, table)
 
     first_condiction_flag = True
@@ -110,19 +109,19 @@ def get_keywords_page_sql(
 
 def get_fetch_alllist(cursor) -> list:
     desc = cursor.description
-    # q = [
-    #     dict(
-    #         zip(
-    #             [col[0] for col in desc],
-    #             (r.decode() if type(r) == bytes else r for r in row),
-    #         )
-    #     )
-    #     for row in cursor.fetchall()
-    # ]
-    # return q
-    return [
-        dict(zip([col[0] for col in desc], row)) for row in cursor.fetchall()
+    q = [
+        dict(
+            zip(
+                [col[0] for col in desc],
+                (r.decode() if isinstance(r, bytes) else r for r in row),
+            )
+        )
+        for row in cursor.fetchall()
     ]
+    return q
+    # return [
+    #     dict(zip([col[0] for col in desc], row)) for row in cursor.fetchall()
+    # ]
 
 
 def create_pages_sql(
