@@ -11,13 +11,13 @@ def convert_vwNews2News(
 
     group_data_News = []
     for d in listdictdata:
-        d["position"] = [{"party:": p.split("*")[0], "trend": float(p.split("*")[1])} for p in d["position"].split("|")]
+        d["position"] = [{"party": p.split("*")[0], "trend": float(p.split("*")[1])} for p in d["position"].split("|")]
         d["keywords"] = d["keywords"].split(",")
         d["producer"] = {
             "id": d["producer_id"],
             "desc": d["producer_desc"],
             "position": [
-                {"party:": p.split("*")[0], "trend": float(p.split("*")[1])} for p in d["producer_position"].split("|")
+                {"party": p.split("*")[0], "trend": float(p.split("*")[1])} for p in d["producer_position"].split("|")
             ],
         }
 
