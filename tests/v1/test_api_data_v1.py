@@ -61,19 +61,19 @@ def test_News(setUp, keyword_url):
                 "id": "55a47e60-f6ef-455c-908c-d0e52ed9fed8",
                 "position": [
                     {
-                        "party:": "民進黨",
+                        "party": "民進黨",
                         "trend": "0.65"
                     },
                     {
-                        "party:": "國民黨",
+                        "party": "國民黨",
                         "trend": "0.2"
                     },
                     {
-                        "party:": "時力",
+                        "party": "時力",
                         "trend": "0.65"
                     },
                     {
-                        "party:": "親中",
+                        "party": "親中",
                         "trend": "0.2"
                     }
                 ],
@@ -91,19 +91,19 @@ def test_News(setUp, keyword_url):
                     "desc": "上報",
                     "position": [
                         {
-                        "party:": "民進黨",
+                        "party": "民進黨",
                         "trend": "0.65"
                         },
                         {
-                        "party:": "國民黨",
+                        "party": "國民黨",
                         "trend": "0.2"
                         },
                         {
-                        "party:": "時力",
+                        "party": "時力",
                         "trend": "0.65"
                         },
                         {
-                        "party:": "親中",
+                        "party": "親中",
                         "trend": "0.2"
                         }
                     ]
