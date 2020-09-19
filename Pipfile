@@ -16,6 +16,8 @@ pymysql = "*"
 requests = "*"
 mysql-connector-python = "*"
 uvicorn = "*"
+flask-sqlalchemy = "*"
+sqlalchemy = "*"
 
 [requires]
 python_version = "3.6"
