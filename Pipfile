@@ -9,13 +9,13 @@ verify_ssl = true
 fastapi = "==0.60.1"
 pytest = "*"
 loguru = "*"
-uvicorn = "*"
 ujson = "*"
 api = {editable = true,path = "."}
 pandas = "*"
 pymysql = "*"
 requests = "*"
 mysql-connector-python = "*"
+uvicorn = "*"
 
 [requires]
 python_version = "3.6"
