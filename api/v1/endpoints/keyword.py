@@ -7,7 +7,8 @@ from loguru import logger
 from starlette.requests import Request
 
 from api.tools import load
-from api.v1.schema import input as input_schema
+from api.backend.responses import success_msg
+from api.v1.schema.input import DataSetInput, OrderByInput, OrderTypeInput
 from api.v1.schema.keywords import News, KeywordList
 
 router = APIRouter()
@@ -45,9 +46,9 @@ def convert_vwNews2News(
 @router.get("/keyword", response_model=KeywordList)
 async def get_data(
     request: Request,
-    dataset: input_schema.DataSetInput,
-    orderby: input_schema.OrderByInput,
-    ordertype: input_schema.OrderTypeInput,
+    dataset: DataSetInput,
+    orderby: OrderByInput,
+    ordertype: OrderTypeInput,
     volumeMin: int = None,
     volumeMax: int = None,
     powerMin: int = None,
@@ -97,4 +98,4 @@ async def get_data(
     convert_data = convert_vwNews2News(ret, keywords, countsinfo)
 
     logger.info(f"get keyword:{keywords} data from {dataset} page {pageNo}")
-    return convert_data
+    return success_msg(convert_data)
