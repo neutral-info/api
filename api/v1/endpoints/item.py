@@ -1,9 +1,12 @@
-import typing
-
+from fastapi import APIRouter
 from loguru import logger
+from api.v1 import schema
+
+router = APIRouter()
 
 
-def get_data(itemtype: str):
+@router.get("/item")
+async def get_data(itemtype: schema.input.ItemTypeInput):
     convert_data = []
     if itemtype == "Position":
         convert_data = ["時代力量", "國民黨", "民進黨", "親民黨", "民眾黨", "無立場"]
