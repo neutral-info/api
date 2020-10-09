@@ -1,8 +1,17 @@
+import datetime
 import typing
 
-from api.tools import load
-from api.v1.schema.keywords import News, KeywordList
+import pymysql
+from fastapi import APIRouter, Depends, Form
 from loguru import logger
+from starlette.requests import Request
+
+from api.tools import load
+from api.backend.responses import success_msg
+from api.v1.schema.input import DataSetInput, OrderByInput, OrderTypeInput
+from api.v1.schema.keywords import News, KeywordList
+
+router = APIRouter()
 
 
 def convert_vwNews2News(
@@ -34,19 +43,21 @@ def convert_vwNews2News(
     return convert_data
 
 
-def get_data(
-    dataset: str,
-    pageNo: int,
-    pageSize: int,
-    keywords: str,
-    volumeMin: int,
-    volumeMax: int,
-    powerMin: int,
-    powerMax: int,
-    positions: str,
-    channel: str,
-    orderby: str,
-    ordertype: str,
+@router.get("/keyword", response_model=KeywordList)
+async def get_data(
+    request: Request,
+    dataset: DataSetInput,
+    orderby: OrderByInput,
+    ordertype: OrderTypeInput,
+    volumeMin: int = None,
+    volumeMax: int = None,
+    powerMin: int = None,
+    powerMax: int = None,
+    positions: str = None,
+    channel: str = None,
+    keywords: str = None,
+    pageNo: int = 1,
+    pageSize: int = 5,
 ):
     # FIXME: need to add powerMin, powerMax, channel filter
     ret = load.NID_pages(
@@ -87,4 +98,4 @@ def get_data(
     convert_data = convert_vwNews2News(ret, keywords, countsinfo)
 
     logger.info(f"get keyword:{keywords} data from {dataset} page {pageNo}")
-    return convert_data
+    return success_msg(convert_data)

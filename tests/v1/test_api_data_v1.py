@@ -6,7 +6,7 @@ import pytest
 import requests
 import uvicorn
 
-from api.main import App
+from api.main import app
 
 
 @pytest.fixture(scope="module")
@@ -15,16 +15,20 @@ def index_url():
 
 
 @pytest.fixture(scope="module")
-def keyword_url(index_url):
-    return f"{index_url}/api/v1/keyword"
+def api_v1_url(index_url):
+    return f"{index_url}/api/v1"
+
+
+@pytest.fixture(scope="module")
+def keyword_url(api_v1_url):
+    return f"{api_v1_url}/keyword"
 
 
 @pytest.fixture(scope="module")
 def setUp():
-    app = App()
     proc = Process(
         target=uvicorn.run,
-        args=(app.api,),
+        args=(app,),
         kwargs={"host": "127.0.0.1", "port": 5000, "log_level": "info"},
         daemon=True,
     )
