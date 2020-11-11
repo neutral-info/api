@@ -34,6 +34,9 @@ def get_keywords_page_sql(
     positions: str,
     volumeMin: int,
     volumeMax: int,
+    author: str,
+    channel: str,
+    producer: str,
     orderby: str,
     ordertype: str,
 ) -> str:
@@ -75,6 +78,39 @@ def get_keywords_page_sql(
         volumeRange_statement = f"AND `volume_now` <= {volumeMax} "
         sql = f" {sql} {volumeRange_statement} "
 
+    if author:
+        author_statement = []
+        for a in author.split(","):
+            a = a.strip()
+            author_statement.append(f" `author_desc` like '%{a}%'")
+
+        author_statement = (
+            "AND ( " + " AND ".join(author_statement) + " )"
+        )
+        sql = f" {sql} {author_statement} "
+
+    if channel:
+        channel_statement = []
+        for c in channel.split(","):
+            c = c.strip()
+            channel_statement.append(f" `channel_desc` like '%{c}%'")
+
+        channel_statement = (
+            "AND ( " + " AND ".join(channel_statement) + " )"
+        )
+        sql = f" {sql} {channel_statement} "
+
+    if producer:
+        producer_statement = []
+        for p in producer.split(","):
+            p = p.strip()
+            producer_statement.append(f" `producer_desc` like '%{p}%'")
+
+        producer_statement = (
+            "AND ( " + " AND ".join(producer_statement) + " )"
+        )
+        sql = f" {sql} {producer_statement} "
+
     if colname != "COUNT(*)":
         order_limit_statement = f"""
                                 ORDER BY `{orderby}` {ordertype}
@@ -110,6 +146,9 @@ def create_pages_sql(
     positions: str,
     volumeMin: int,
     volumeMax: int,
+    author: str,
+    channel: str,
+    producer: str,
     datatype: str,
     orderby: str,
     ordertype: str,
@@ -126,6 +165,9 @@ def create_pages_sql(
         positions,
         volumeMin,
         volumeMax,
+        author,
+        channel,
+        producer,
         orderby,
         ordertype,
     )
@@ -141,6 +183,9 @@ def load_pages(
     positions: str = "",
     volumeMin: int = None,
     volumeMax: int = None,
+    author: str = "",
+    channel: str = "",
+    producer: str = "",
     datatype: str = "",
     orderby: str = "",
     ordertype: str = "",
@@ -157,6 +202,9 @@ def load_pages(
         positions,
         volumeMin,
         volumeMax,
+        author,
+        channel,
+        producer,
         datatype,
         orderby,
         ordertype,
