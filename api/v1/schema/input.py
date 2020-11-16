@@ -8,6 +8,7 @@ class DataSetInput(str, Enum):
 class ItemTypeInput(str, Enum):
     Position = "Position"
     Channel = "Channel"
+    Producer = "Producer"
 
 
 class OrderByInput(str, Enum):

@@ -15,18 +15,24 @@ router = APIRouter()
 
 
 def convert_vwNews2News(
-    listdictdata: typing.List[typing.Dict[str, typing.Union[str, list, float]]], keywords: str, countsinfo: int,
+    listdictdata: typing.List[typing.Dict[str, typing.Union[str, list, float]]],
+    keywords: str,
+    countsinfo: int,
 ) -> KeywordList:
 
     group_data_News = []
     for d in listdictdata:
-        d["position"] = [{"party": p.split("*")[0], "trend": float(p.split("*")[1])} for p in d["position"].split("|")]
+        d["position"] = [
+            {"party": p.split("*")[0], "trend": float(p.split("*")[1])}
+            for p in d["position"].split("|")
+        ]
         d["keywords"] = d["keywords"].split(",")
         d["producer"] = {
             "id": d["producer_id"],
             "desc": d["producer_desc"],
             "position": [
-                {"party": p.split("*")[0], "trend": float(p.split("*")[1])} for p in d["producer_position"].split("|")
+                {"party": p.split("*")[0], "trend": float(p.split("*")[1])}
+                for p in d["producer_position"].split("|")
             ],
         }
         d.pop("producer_id", None)
@@ -37,7 +43,8 @@ def convert_vwNews2News(
             "id": d["author_id"],
             "desc": d["author_desc"],
             "position": [
-                {"party": p.split("*")[0], "trend": float(p.split("*")[1])} for p in d["author_position"].split("|")
+                {"party": p.split("*")[0], "trend": float(p.split("*")[1])}
+                for p in d["author_position"].split("|")
             ],
         }
         d.pop("author_id", None)
@@ -72,7 +79,7 @@ async def get_data(
     positions: str = None,
     author: str = None,
     channel: str = None,
-    producer: str=None,
+    producer: str = None,
     keywords: str = None,
     pageNo: int = 1,
     pageSize: int = 5,
