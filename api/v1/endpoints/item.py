@@ -24,14 +24,8 @@ def convert_lisdict2list(
 
 @router.get("/item", response_model=ItemList)
 async def get_data(request: Request, itemtype: ItemTypeInput):
-    convert_data = []
-    if itemtype == "Position":
-        convert_data = ["時代力量", "國民黨", "民進黨", "親民黨", "民眾黨", "無立場"]
-    elif itemtype == "Channel":
-        convert_data = ["新聞", "社群論壇", "聊天", "部落格", "內容農場", "影音"]
-    elif itemtype == "Producer":
-        raw_data = load.NID_items(dataset=itemtype)
-        convert_data = convert_lisdict2list(raw_data)
+    raw_data = load.NID_items(dataset=itemtype)
+    convert_data = convert_lisdict2list(raw_data)
 
     logger.info(f"get itemtype:{itemtype} data")
     return success_msg(convert_data)
