@@ -34,6 +34,9 @@ def get_keywords_page_sql(
     positions: str,
     volumeMin: int,
     volumeMax: int,
+    author: str,
+    channel: str,
+    producer: str,
     orderby: str,
     ordertype: str,
 ) -> str:
@@ -43,7 +46,9 @@ def get_keywords_page_sql(
         SELECT {0}
         FROM `{1}`
         WHERE 1=1
-        """.format(colname, table)
+        """.format(
+        colname, table
+    )
 
     if keywords:
         keywords_statement = []
@@ -51,9 +56,7 @@ def get_keywords_page_sql(
             k = k.strip()
             keywords_statement.append(f" `keywords` like '%{k}%' ")
 
-        keywords_statement = (
-            "AND ( " + "OR".join(keywords_statement) + " )"
-        )
+        keywords_statement = "AND ( " + "OR".join(keywords_statement) + " )"
         sql = f" {sql} {keywords_statement} "
 
     if positions:
@@ -62,9 +65,7 @@ def get_keywords_page_sql(
             p = p.strip()
             position_statement.append(f" `position` like '%{p}%'")
 
-        position_statement = (
-            "AND ( " + " AND ".join(position_statement) + " )"
-        )
+        position_statement = "AND ( " + " AND ".join(position_statement) + " )"
         sql = f" {sql} {position_statement} "
 
     if volumeMin:
@@ -74,6 +75,33 @@ def get_keywords_page_sql(
     if volumeMax:
         volumeRange_statement = f"AND `volume_now` <= {volumeMax} "
         sql = f" {sql} {volumeRange_statement} "
+
+    if author:
+        author_statement = []
+        for a in author.split(","):
+            a = a.strip()
+            author_statement.append(f" `author_desc` like '%{a}%'")
+
+        author_statement = "AND ( " + " AND ".join(author_statement) + " )"
+        sql = f" {sql} {author_statement} "
+
+    if channel:
+        channel_statement = []
+        for c in channel.split(","):
+            c = c.strip()
+            channel_statement.append(f" `channel_desc` like '%{c}%'")
+
+        channel_statement = "AND ( " + " AND ".join(channel_statement) + " )"
+        sql = f" {sql} {channel_statement} "
+
+    if producer:
+        producer_statement = []
+        for p in producer.split(","):
+            p = p.strip()
+            producer_statement.append(f" `producer_desc` like '%{p}%'")
+
+        producer_statement = "AND ( " + " AND ".join(producer_statement) + " )"
+        sql = f" {sql} {producer_statement} "
 
     if colname != "COUNT(*)":
         order_limit_statement = f"""
@@ -110,6 +138,9 @@ def create_pages_sql(
     positions: str,
     volumeMin: int,
     volumeMax: int,
+    author: str,
+    channel: str,
+    producer: str,
     datatype: str,
     orderby: str,
     ordertype: str,
@@ -126,6 +157,9 @@ def create_pages_sql(
         positions,
         volumeMin,
         volumeMax,
+        author,
+        channel,
+        producer,
         orderby,
         ordertype,
     )
@@ -141,6 +175,9 @@ def load_pages(
     positions: str = "",
     volumeMin: int = None,
     volumeMax: int = None,
+    author: str = "",
+    channel: str = "",
+    producer: str = "",
     datatype: str = "",
     orderby: str = "",
     ordertype: str = "",
@@ -157,11 +194,31 @@ def load_pages(
         positions,
         volumeMin,
         volumeMax,
+        author,
+        channel,
+        producer,
         datatype,
         orderby,
         ordertype,
     )
 
+    logger.info(f"sql cmd:{sql}")
+
+    connect = clients.get_db_client(database)
+    cursor = connect.cursor()
+    cursor.execute(sql)
+    data = get_fetch_alllist(cursor)
+    cursor.close()
+    connect.close()
+
+    return data
+
+
+def load_items(
+    database: str = "",
+    table: str = "",
+):
+    sql = f"SELECT DISTINCT {table}_desc FROM {table};"
     logger.info(f"sql cmd:{sql}")
 
     connect = clients.get_db_client(database)

@@ -25,6 +25,8 @@ class FastAPI(FastAPI):
             "http://localhost:443",
             "http://localhost:8080",
             "http://localhost:5000",
+            "http://neutral-info.herokuapp.com",
+            "https://neutral-info.herokuapp.com",
         ]
         self.add_middleware(
             CORSMiddleware,

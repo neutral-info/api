@@ -9,7 +9,19 @@ class News(BaseModel):
     title: str
     text: str
     keywords: typing.List[str]
+    author: typing.Dict[
+        str,
+        typing.Union[
+            int, str, typing.List[typing.Dict[str, typing.Union[str, float]]]
+        ],
+    ]
     producer: typing.Dict[
+        str,
+        typing.Union[
+            int, str, typing.List[typing.Dict[str, typing.Union[str, float]]]
+        ],
+    ]
+    channel: typing.Dict[
         str,
         typing.Union[
             int, str, typing.List[typing.Dict[str, typing.Union[str, float]]]

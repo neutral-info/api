@@ -15,25 +15,48 @@ router = APIRouter()
 
 
 def convert_vwNews2News(
-    listdictdata: typing.List[typing.Dict[str, typing.Union[str, list, float]]], keywords: str, countsinfo: int,
+    listdictdata: typing.List[typing.Dict[str, typing.Union[str, list, float]]],
+    keywords: str,
+    countsinfo: int,
 ) -> KeywordList:
 
     group_data_News = []
     for d in listdictdata:
-        d["position"] = [{"party": p.split("*")[0], "trend": float(p.split("*")[1])} for p in d["position"].split("|")]
+        d["position"] = [
+            {"party": p.split("*")[0], "trend": float(p.split("*")[1])}
+            for p in d["position"].split("|")
+        ]
         d["keywords"] = d["keywords"].split(",")
         d["producer"] = {
             "id": d["producer_id"],
             "desc": d["producer_desc"],
             "position": [
-                {"party": p.split("*")[0], "trend": float(p.split("*")[1])} for p in d["producer_position"].split("|")
+                {"party": p.split("*")[0], "trend": float(p.split("*")[1])}
+                for p in d["producer_position"].split("|")
             ],
         }
-
         d.pop("producer_id", None)
         d.pop("producer_desc", None)
         d.pop("producer_position", None)
 
+        d["author"] = {
+            "id": d["author_id"],
+            "desc": d["author_desc"],
+            "position": [
+                {"party": p.split("*")[0], "trend": float(p.split("*")[1])}
+                for p in d["author_position"].split("|")
+            ],
+        }
+        d.pop("author_id", None)
+        d.pop("author_desc", None)
+        d.pop("author_position", None)
+
+        d["channel"] = {
+            "id": d["channel_id"],
+            "desc": d["channel_desc"],
+        }
+        d.pop("channel_id", None)
+        d.pop("channel_desc", None)
         group_data_News.append(News(**d).dict())
 
     convert_data = {}
@@ -54,12 +77,14 @@ async def get_data(
     powerMin: int = None,
     powerMax: int = None,
     positions: str = None,
+    author: str = None,
     channel: str = None,
+    producer: str = None,
     keywords: str = None,
     pageNo: int = 1,
     pageSize: int = 5,
 ):
-    # FIXME: need to add powerMin, powerMax, channel filter
+    # FIXME: need to add powerMin, powerMax
     ret = load.NID_pages(
         dataset=dataset,
         pageNo=pageNo,
@@ -68,6 +93,9 @@ async def get_data(
         positions=positions,
         volumeMin=volumeMin,
         volumeMax=volumeMax,
+        author=author,
+        channel=channel,
+        producer=producer,
         datatype="page",
         orderby=orderby,
         ordertype=ordertype,
@@ -82,6 +110,9 @@ async def get_data(
         positions=positions,
         volumeMin=volumeMin,
         volumeMax=volumeMax,
+        author=author,
+        channel=channel,
+        producer=producer,
         datatype="count",
         orderby=orderby,
         ordertype=ordertype,

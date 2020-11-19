@@ -10,7 +10,9 @@ from api.config import (
 )
 
 
-def data_db(database: str,):
+def data_db(
+    database: str,
+):
     connect = mysql.connector.connect(
         host=MYSQL_DATA_HOST,
         port=MYSQL_DATA_PORT,
