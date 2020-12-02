@@ -65,7 +65,7 @@ def get_keywords_page_sql(
             p = p.strip()
             position_statement.append(f" `position` like '%{p}%'")
 
-        position_statement = "AND ( " + " AND ".join(position_statement) + " )"
+        position_statement = "AND ( " + " OR ".join(position_statement) + " )"
         sql = f" {sql} {position_statement} "
 
     if volumeMin:
@@ -82,7 +82,7 @@ def get_keywords_page_sql(
             a = a.strip()
             author_statement.append(f" `author_desc` like '%{a}%'")
 
-        author_statement = "AND ( " + " AND ".join(author_statement) + " )"
+        author_statement = "AND ( " + " OR ".join(author_statement) + " )"
         sql = f" {sql} {author_statement} "
 
     if channel:
@@ -91,7 +91,7 @@ def get_keywords_page_sql(
             c = c.strip()
             channel_statement.append(f" `channel_desc` like '%{c}%'")
 
-        channel_statement = "AND ( " + " AND ".join(channel_statement) + " )"
+        channel_statement = "AND ( " + " OR ".join(channel_statement) + " )"
         sql = f" {sql} {channel_statement} "
 
     if producer:
@@ -100,7 +100,7 @@ def get_keywords_page_sql(
             p = p.strip()
             producer_statement.append(f" `producer_desc` like '%{p}%'")
 
-        producer_statement = "AND ( " + " AND ".join(producer_statement) + " )"
+        producer_statement = "AND ( " + " OR ".join(producer_statement) + " )"
         sql = f" {sql} {producer_statement} "
 
     if colname != "COUNT(*)":
