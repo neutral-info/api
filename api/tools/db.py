@@ -34,9 +34,9 @@ def get_keywords_page_sql(
     positions: str,
     volumeMin: int,
     volumeMax: int,
-    author: str,
-    channel: str,
-    producer: str,
+    authors: str,
+    channels: str,
+    producers: str,
     orderby: str,
     ordertype: str,
 ) -> str:
@@ -76,32 +76,32 @@ def get_keywords_page_sql(
         volumeRange_statement = f"AND `volume_now` <= {volumeMax} "
         sql = f" {sql} {volumeRange_statement} "
 
-    if author:
-        author_statement = []
-        for a in author.split(","):
+    if authors:
+        authors_statement = []
+        for a in authors.split(","):
             a = a.strip()
-            author_statement.append(f" `author_desc` like '%{a}%'")
+            authors_statement.append(f" `author_desc` like '%{a}%'")
 
-        author_statement = "AND ( " + " OR ".join(author_statement) + " )"
-        sql = f" {sql} {author_statement} "
+        authors_statement = "AND ( " + " OR ".join(authors_statement) + " )"
+        sql = f" {sql} {authors_statement} "
 
-    if channel:
-        channel_statement = []
-        for c in channel.split(","):
+    if channels:
+        channels_statement = []
+        for c in channels.split(","):
             c = c.strip()
-            channel_statement.append(f" `channel_desc` like '%{c}%'")
+            channels_statement.append(f" `channel_desc` like '%{c}%'")
 
-        channel_statement = "AND ( " + " OR ".join(channel_statement) + " )"
-        sql = f" {sql} {channel_statement} "
+        channels_statement = "AND ( " + " OR ".join(channels_statement) + " )"
+        sql = f" {sql} {channels_statement} "
 
-    if producer:
-        producer_statement = []
-        for p in producer.split(","):
+    if producers:
+        producers_statement = []
+        for p in producers.split(","):
             p = p.strip()
-            producer_statement.append(f" `producer_desc` like '%{p}%'")
+            producers_statement.append(f" `producer_desc` like '%{p}%'")
 
-        producer_statement = "AND ( " + " OR ".join(producer_statement) + " )"
-        sql = f" {sql} {producer_statement} "
+        producers_statement = "AND ( " + " OR ".join(producers_statement) + " )"
+        sql = f" {sql} {producers_statement} "
 
     if colname != "COUNT(*)":
         order_limit_statement = f"""
@@ -138,9 +138,9 @@ def create_pages_sql(
     positions: str,
     volumeMin: int,
     volumeMax: int,
-    author: str,
-    channel: str,
-    producer: str,
+    authors: str,
+    channels: str,
+    producers: str,
     datatype: str,
     orderby: str,
     ordertype: str,
@@ -157,9 +157,9 @@ def create_pages_sql(
         positions,
         volumeMin,
         volumeMax,
-        author,
-        channel,
-        producer,
+        authors,
+        channels,
+        producers,
         orderby,
         ordertype,
     )
@@ -175,9 +175,9 @@ def load_pages(
     positions: str = "",
     volumeMin: int = None,
     volumeMax: int = None,
-    author: str = "",
-    channel: str = "",
-    producer: str = "",
+    authors: str = "",
+    channels: str = "",
+    producers: str = "",
     datatype: str = "",
     orderby: str = "",
     ordertype: str = "",
@@ -194,9 +194,9 @@ def load_pages(
         positions,
         volumeMin,
         volumeMax,
-        author,
-        channel,
-        producer,
+        authors,
+        channels,
+        producers,
         datatype,
         orderby,
         ordertype,
