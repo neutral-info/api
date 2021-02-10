@@ -34,6 +34,8 @@ def get_keywords_page_sql(
     positions: str,
     volumeMin: int,
     volumeMax: int,
+    bombMin: int,
+    bombMax: int,
     authors: str,
     channels: str,
     producers: str,
@@ -75,6 +77,14 @@ def get_keywords_page_sql(
     if volumeMax:
         volumeRange_statement = f"AND `volume_now` <= {volumeMax} "
         sql = f" {sql} {volumeRange_statement} "
+
+    if bombMin:
+        bombRange_statement = f"AND `bomb_now` >= {bombMin}"
+        sql = f" {sql} {bombRange_statement} "
+
+    if bombMax:
+        bombRange_statement = f"AND `bomb_now` <= {bombMax} "
+        sql = f" {sql} {bombRange_statement} "
 
     if authors:
         authors_statement = []
@@ -138,6 +148,8 @@ def create_pages_sql(
     positions: str,
     volumeMin: int,
     volumeMax: int,
+    bombMin: int,
+    bombMax: int,
     authors: str,
     channels: str,
     producers: str,
@@ -157,6 +169,8 @@ def create_pages_sql(
         positions,
         volumeMin,
         volumeMax,
+        bombMin,
+        bombMax,
         authors,
         channels,
         producers,
@@ -175,6 +189,8 @@ def load_pages(
     positions: str = "",
     volumeMin: int = None,
     volumeMax: int = None,
+    bombMin: int = None,
+    bombMax: int = None,
     authors: str = "",
     channels: str = "",
     producers: str = "",
@@ -194,6 +210,8 @@ def load_pages(
         positions,
         volumeMin,
         volumeMax,
+        bombMin,
+        bombMax,
         authors,
         channels,
         producers,
