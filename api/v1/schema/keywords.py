@@ -46,7 +46,7 @@ class News(BaseModel):
     channel: NewsChannel = Field(description="News channel detail")
     volume_now: float = Field(description="News current volume")
     volume_yesterday: float = Field(description="News yesterday volume")
-    bomb_now: float = Field(description="News current bomb")
+    power_now: float = Field(description="News current power")
 
 
 class KeywordList(BaseModel):

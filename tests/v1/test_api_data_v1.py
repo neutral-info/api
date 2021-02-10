@@ -56,8 +56,8 @@ def test_openapi(setUp, index_url):
 #         "pageSize": 1,
 #         "volumeMin": 0,
 #         "volumeMax": 10,
-#         "bombMin": 0,
-#         "bombMax": 1,
+#         "powerMin": 0,
+#         "powerMax": 1,
 #         "orderby": "pubdate",
 #         "producers": "自由時報",
 #         "ordertype": "DESC",
@@ -138,7 +138,7 @@ def test_openapi(setUp, index_url):
 #                 },
 #                 "volume_now": 0,
 #                 "volume_yesterday": 0,
-#                 "bomb_now": 0,
+#                 "power_now": 0,
 #             }
 #         ]
 #     }
