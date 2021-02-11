@@ -76,8 +76,6 @@ async def get_data(
     volumeMax: int = None,
     powerMin: int = None,
     powerMax: int = None,
-    bombMin: int = None,
-    bombMax: int = None,
     positions: str = None,
     authors: str = None,
     channels: str = None,
@@ -86,8 +84,7 @@ async def get_data(
     pageNo: int = 1,
     pageSize: int = 5,
 ):
-    # FIXME: need to add powerMin, powerMax
-    ret = load.NID_pages(
+    parameter = dict(
         dataset=dataset,
         pageNo=pageNo,
         pageSize=pageSize,
@@ -95,8 +92,8 @@ async def get_data(
         positions=positions,
         volumeMin=volumeMin,
         volumeMax=volumeMax,
-        bombMin=bombMin,
-        bombMax=bombMax,
+        powerMin=powerMin,
+        powerMax=powerMax,
         authors=authors,
         channels=channels,
         producers=producers,
@@ -105,25 +102,11 @@ async def get_data(
         ordertype=ordertype,
         version="v1",
     )
+    ret = load.NID_pages(**parameter)
 
-    ret_count = load.NID_pages(
-        dataset=dataset,
-        pageNo=pageNo,
-        pageSize=pageSize,
-        keywords=keywords,
-        positions=positions,
-        volumeMin=volumeMin,
-        volumeMax=volumeMax,
-        bombMin=bombMin,
-        bombMax=bombMax,
-        authors=authors,
-        channels=channels,
-        producers=producers,
-        datatype="count",
-        orderby=orderby,
-        ordertype=ordertype,
-        version="v1",
-    )
+    parameter["datatype"] = "count"
+    ret_count = load.NID_pages(**parameter)
+
     countsinfo = {}
     countsinfo["totalNews"] = ret_count[0]["COUNT(*)"]
     countsinfo["totalPageNo"] = (

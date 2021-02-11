@@ -13,7 +13,7 @@ class ItemTypeInput(str, Enum):
 
 class OrderByInput(str, Enum):
     pubdate = "pubdate"
-    # power = "power"
+    power = "power_now"
     volume = "volume_now"
 
 
