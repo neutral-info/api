@@ -47,6 +47,7 @@ class News(BaseModel):
     volume_now: float = Field(description="News current volume")
     volume_yesterday: float = Field(description="News yesterday volume")
     power_now: float = Field(description="News current power")
+    url: str = Field(description="News url")
 
 
 class KeywordList(BaseModel):
