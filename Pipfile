@@ -18,6 +18,8 @@ mysql-connector-python = "*"
 uvicorn = "*"
 flask-sqlalchemy = "*"
 sqlalchemy = "*"
+pytest-cov = "*"
+typing-extensions = "*"
 
 [requires]
 python_version = "3.6"
