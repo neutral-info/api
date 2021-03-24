@@ -31,4 +31,4 @@ jobs:
         pipenv sync
     - name: Test with pytest
       run: |
-        pipenv run pytest
+        pipenv run pytest --cov-config=.coveragerc --cov=./api/ tests/
