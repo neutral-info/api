@@ -23,7 +23,7 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     keywords='python',  # Optional
-    packages=find_packages(exclude=['importlib', 'pymysql']),
+    packages=find_packages(exclude=['importlib', 'pymysql', 'typing_extensions']),
     project_urls={  # Optional
         'Source': 'https://github.com/neutral-info',
     },
