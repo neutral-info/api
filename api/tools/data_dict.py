@@ -6,8 +6,8 @@ TABLE_DICT = dict(
 )
 
 DATABASE_DICT = dict(
-    News="JSON2",
-    Position="JSON2",
-    Channel="JSON2",
-    Producer="JSON2",
+    News="neutralinfo",
+    Position="neutralinfo",
+    Channel="neutralinfo",
+    Producer="neutralinfo",
 )
